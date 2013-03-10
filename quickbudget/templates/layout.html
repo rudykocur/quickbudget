@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+  	<link rel="shortcut icon" href="/static/favicon.ico" />
+  	
+    <link rel="stylesheet" href="{{ url_for('static', filename='reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <script src="{{ url_for('static', filename='moo-core.js') }}"></script>
+    <script src="{{ url_for('static', filename='mootools-more-1.4.0.1.js') }}"></script>
+    
+    <title>{% block title %}{% endblock %} - Quick Budget</title>
+    
+    {% block head %}{% endblock %}
+  </head>
+<body>
+    <div id="nav">
+        <a href="{{ url_for('main') }}">Home</a> | <a href="{{ url_for('importer') }}">Load operations</a>
+    </div>
+  <div id="content">{% block content %}{% endblock %}</div>
+  
+  <!-- 
+  <div id="footer">
+    {% block footer %}
+    &copy; Copyright 2010 by <a href="http://domain.invalid/">you</a>.
+    {% endblock %}
+  </div>
+   -->
+</body>
