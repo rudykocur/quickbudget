@@ -1,6 +1,6 @@
 import os
 
-from sqlalchemy import Column, Integer, Unicode, ForeignKey, Boolean, Numeric, DateTime
+from sqlalchemy import Column, Integer, Unicode, ForeignKey, Numeric, DateTime
 from sqlalchemy.orm import relationship
 
 from quickbudget.db import Base as DeclarativeBase
@@ -13,6 +13,9 @@ class RecipeImage(DeclarativeBase):
     recipeId = Column(Integer, ForeignKey('recipe.id'), nullable=True)
 
     contentPath = Column(Unicode)
+    crc = Column(Unicode)
+    md5 = Column(Unicode)
+    #created = Column(DateTime)
 
     recipe = relationship("Recipe")
 

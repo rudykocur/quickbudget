@@ -36,3 +36,5 @@ nosetests.xml
 
 .idea
 *.db
+
+quickbudget/data/receipt/*
