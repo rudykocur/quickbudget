@@ -75,9 +75,7 @@ def importAll(srv, folderId):
 
 
 if __name__ == '__main__':
-    with open('config.yaml') as f:
-        config = yaml.load(f)
-    db.init_db(config['database'])
+    db.init_db()
 
     out = importAll(gdrive.drive_service, '0B_V-GNTsCHGERm9VNzc4YmRyQTA')
 
