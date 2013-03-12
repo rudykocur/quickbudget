@@ -2,7 +2,7 @@
 import os
 import zlib
 import hashlib
-import pprint
+import yaml
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -26,9 +26,16 @@ def importAll(srv, folderId):
 
     allRecipeImages = gdrive.retrieve_all_files(srv, q)
 
+    result = {
+        'new': 0,
+        'total': 0,
+        'duplicate': 0
+    }
+
     for img in allRecipeImages:
         print 'OMG', img['title'], '::', img['id']  # , '::', img['embedLink']
 
+        result['total'] += 1
 
         try:
             savedImage = RecipeImage.query.filter(RecipeImage.uid == img['id']).one()
@@ -41,6 +48,7 @@ def importAll(srv, folderId):
             try:
                 savedDuplicate = RecipeImage.query.filter(RecipeImage.crc == crc and RecipeImage.md5 == md5).one()
                 print 'PROPABLY A DUPLICATE', img['id'], ':: Other one:', savedDuplicate.uid
+                result['duplicate'] += 1
             except NoResultFound:
 
                 filename = '%s-%s' % (img['id'], img['title'])
@@ -57,15 +65,24 @@ def importAll(srv, folderId):
                 db_session.add(image)
                 db_session.commit()
 
+                result['new'] += 1
+
         print
         print
+
+    return result
 
 
 
 if __name__ == '__main__':
-    db.init_db()
+    with open('config.yaml') as f:
+        config = yaml.load(f)
+    db.init_db(config['database'])
 
-    importAll(gdrive.drive_service, '0B_V-GNTsCHGERm9VNzc4YmRyQTA')
+    out = importAll(gdrive.drive_service, '0B_V-GNTsCHGERm9VNzc4YmRyQTA')
+
+    print
+    print 'SUMMARY', out
 
     db_session.commit()
 

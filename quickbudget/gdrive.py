@@ -11,9 +11,7 @@ from oauth2client.file import Storage
 s = Storage('google_api.credentials')
 credentials = s.get()
 
-http = httplib2.Http()
-http = credentials.authorize(http)
-
+http = credentials.authorize(httplib2.Http())
 drive_service = build('drive', 'v2', http=http)
 
 

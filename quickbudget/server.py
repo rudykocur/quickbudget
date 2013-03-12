@@ -17,7 +17,7 @@ def shutdown_seesion(exception=None):
 
 from quickbudget import db, pages
 
-db.init_db()
+db.init_db(config['database'])
 pages.init_routing(app)
 
 if __name__ == "__main__":
