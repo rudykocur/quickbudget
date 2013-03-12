@@ -94,6 +94,9 @@ class BankImportHistory(DeclarativeBase):
     type = Column(Unicode)
     date = Column(DateTime)
 
+    crc = Column(Unicode)
+    md5 = Column(Unicode)
+
     def __init__(self, path, type):
         self.contentPath = path
         self.type = type
