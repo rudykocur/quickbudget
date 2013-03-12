@@ -34,6 +34,7 @@ class Recipe(DeclarativeBase):
 
     total = Column(Numeric(18, 2), nullable=False)
     date = Column(Date, nullable=True)
+    note = Column(Unicode)
 
     #expenseCategoryId = Column(Integer, ForeignKey('expense_category.id'), nullable=True)
 
