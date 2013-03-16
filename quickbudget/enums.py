@@ -2,10 +2,10 @@ __author__ = 'ivan'
 
 
 class IMPORTTYPE:
-    pekao_cc = 'pekao_cc'
-    pekao_oper = 'pekao_oper'
+    pekao_cc = u'pekao_cc'
+    pekao_oper = u'pekao_oper'
 
 
 class IMPORTSTATUS:
-    failed = 'failed'
-    completed = 'completed'
+    failed = u'failed'
+    completed = u'completed'

@@ -30,7 +30,7 @@ class Recipe(DeclarativeBase):
     __tablename__ = 'recipe'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    uid = Column(Unicode, primary_key=True)
+    uid = Column(Unicode, unique=True)
 
     total = Column(Numeric(18, 2), nullable=False)
     date = Column(Date, nullable=True)
@@ -82,7 +82,11 @@ class RecipeImportData(DeclarativeBase):
         self.recipe = recipe
         self.bankImport = bankImport
         self.uid = uid
-        self.line = line
+        self.importLine = line
+
+    @classmethod
+    def get(cls, uid):
+        return cls.query.filter(cls.uid == uid).one()
 
 
 class BankImportHistory(DeclarativeBase):
@@ -102,5 +106,9 @@ class BankImportHistory(DeclarativeBase):
         #self.contentPath = path
         self.type = type
         self.date = datetime.datetime.now()
+
+    @classmethod
+    def findByHash(cls, md5, crc):
+        return cls.query.filter(cls.crc == crc, cls.md5 == md5).one()
 
 
