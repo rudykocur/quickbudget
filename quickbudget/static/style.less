@@ -1,98 +1,173 @@
 
+.background-gradient (@from, @to) {
+    background: -webkit-gradient(linear, left top, left bottom, from(@from), to(@to));
+    background: -moz-linear-gradient(top, @from,  @to);
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='@from', endColorstr='@to');
+}
 
-#connectArea {
-  overflow: auto;
-
-  #receiptListContainer {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    overflow: auto;
-    width: 400px;
-  }
-
-  #receiptList {
-
-  }
-
-  #receiptList li {
-  /*display: table-row;*/
-  /*border: solid 3px transparent;*/
-    position: relative;
-    padding: 5px 5px;
-
-    border-bottom: solid 1px black;
+.button {
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font: 14px/100% Arial, Helvetica, sans-serif;
+    padding: .5em 2em .55em;
+    text-shadow: 0 1px 1px rgba(0,0,0,.3);
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    border-radius: .5em;
+    -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2);
 
     &:hover {
-      background: #d0d0d0;
+        text-decoration: none;
     }
 
+    &:active {
+        position: relative;
+        top: 1px;
+    }
+}
 
-    .date {
-      display: block;
+.orange {
+    color: #fef4e9;
+    border: solid 1px #da7c0c;
+    .background-gradient(#faa51a, #f47a20);
+
+    &:hover {
+        .background-gradient(#f88e11, #f06015)
     }
 
-    .title {
-      display: block;
-      padding-left: 20px;
-      margin-top: 5px;
+    &:active {
+        color: #fcd3a5;
+        .background-gradient(#f47a20, #faa51a)
+    }
+}
+
+.blue {
+    color: #d9eef7;
+    border: solid 1px #0076a3;
+    .background-gradient(#00adee, #0078a5);
+
+    &:hover {
+        .background-gradient(#0095cc, #00678e)
     }
 
-    .total {
-      position: absolute;
-      right: 5px;
-      top: 5px;
-
+    &:active {
+        color: #fcd3a5;
+        .background-gradient(#0078a5, #00adee)
     }
-  }
+}
 
-
-  #imagesArea {
-    margin-left: 400px;
-
-    #imagesAreaContainer {
+#nav {
+    margin: 5px;
+    li {
+        display: inline-block;
     }
+}
 
-    #imagePreview {
-      background: yellow;
-    }
 
-    #imageListContainer {
-      position: relative;
-      background: green;
+#connectArea {
+    overflow: auto;
+    position: relative;
 
-      .scrollarea {
+    #receiptListContainer {
         position: absolute;
-        top: 0;
-        left: 0;
+        top: 0px;
+        left: 0px;
+        overflow: auto;
+        width: 400px;
+    }
 
-        overflow: hidden;
-        overflow-x: auto;
+    #receiptList {
 
-        #imageList {
-        /*display: table;*/
-          white-space: nowrap;
+    }
 
-          li {
-          /*display: table-cell;*/
-            display: inline-block;
-            width: 200px;
-            height: 200px;
+    #receiptList li {
+    /*display: table-row;*/
+    /*border: solid 3px transparent;*/
+        position: relative;
+        padding: 5px 5px;
 
-            text-align: center;
+        border-bottom: solid 1px black;
 
-            &:hover {
-              background: blue;
-            }
-
-            img {
-              vertical-align: top;
-            }
-          }
+        &:hover {
+            background: #d0d0d0;
         }
 
-      }
+        .date {
+            display: block;
+        }
 
+        .title {
+            display: block;
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .total {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+
+        }
     }
-  }
+
+    #imagesArea {
+        margin-left: 400px;
+
+        .actions {
+            padding:  5px;
+
+            .spacer {
+                display: inline-block;
+                width: 2px;
+                background: red;
+            }
+        }
+
+        #imagePreview {
+            background: yellow;
+        }
+
+        #imageListContainer {
+            position: relative;
+            background: green;
+
+            .scrollarea {
+                position: absolute;
+                top: 0;
+                left: 0;
+
+                overflow: hidden;
+                overflow-x: auto;
+
+                #imageList {
+                /*display: table;*/
+                    white-space: nowrap;
+
+                    li {
+                    /*display: table-cell;*/
+                        display: inline-block;
+                        width: 200px;
+                        height: 200px;
+
+                        text-align: center;
+
+                        &:hover {
+                            background: blue;
+                        }
+
+                        img {
+                            vertical-align: top;
+                        }
+                    }
+                }
+
+            }
+
+        }
+    }
 }

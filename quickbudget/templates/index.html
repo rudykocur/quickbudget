@@ -13,27 +13,34 @@
     <div id="receiptListContainer">
         <ul id="receiptList">
             {% for receipt in receipts %}
-                <li><span class="date">{{receipt.date}}</span><span class="title">{{ receipt.note }}</span><span class="total">{{ receipt.total }}</span></li>
+                <li>
+                    <span class="date">{{ receipt.date }}</span>
+                    <span class="title">{{ receipt.note }}</span>
+                    <span class="total">{{ receipt.total }}</span>
+                </li>
             {% endfor %}
         </ul>
     </div>
     <div id="imagesArea">
-        <div id="imagesAreaContainer">
+        <div class="actions">
+            <a class="button blue" href="#1">Connect</a>
+            <span class="spacer" >&nbsp;</span>
+            <a class="button blue" href="#2">test 2</a>
+        </div>
+        <div id="imagePreview">
+            Image preview
+        </div>
+        <div id="imageListContainer">
+            <div class="scrollarea">
 
-            <div id="imagePreview">
-                Image preview
-            </div>
-            <div id="imageListContainer">
-                <div class="scrollarea">
-
-                    <ul id="imageList">
-                        {% for image in images %}
-                            <li><img src="/receipt_thumb/{{image.uid}}"/></li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                <ul id="imageList">
+                    {% for image in images %}
+                        <li><img src="/receipt_thumb/{{image.uid}}"/></li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -41,32 +48,36 @@
 <script language="javascript">
     function autoResizeDiv()
     {
-        var availableHeight = window.getSize().y;
+        var availableHeight = $(window).getSize().y;
         var scrollSize = getScrollBarWidth();
 
-        //document.body.style.height = window.innerHeight +'px';
+        var mainArea = $('connectArea');
+
+        availableHeight -= mainArea.getPosition().y;
+
         $('receiptListContainer').setStyle('height', availableHeight);
 
         var scrollArea = $('imageListContainer').getElement('.scrollarea');
 
-        scrollArea.setStyle('width', $('imagesAreaContainer').getSize().x);
+        scrollArea.setStyle('width', $('imagesArea').getSize().x);
 
-        console.log('OMG', scrollArea.getSize().y, '::', scrollSize);
+        //console.log('OMG', scrollArea.getSize().y, '::', scrollSize);
         $('imageListContainer').setStyle('height', scrollArea.getSize().y);
-        $('imagePreview').setStyle('height', availableHeight - $('imageListContainer').getSize().y);
-    }
-    window.onresize = autoResizeDiv;
-    autoResizeDiv();
 
-//    $(window).addEvent('domready', function() {
-//        autoResizeDiv();
-//    });
+        var previewSize = availableHeight;
+        previewSize -= $('imageListContainer').getSize().y;
+        previewSize -= $('imagesArea').getElement('.actions').getSize().y;
+
+        $('imagePreview').setStyle('height', previewSize);
+    }
+    $(window).addEvent('resize',autoResizeDiv);
 
     $(window).addEvent('load', function() {
-        console.log('YYY');
         autoResizeDiv();
         autoResizeDiv();
     });
+
+    autoResizeDiv();
 </script>
 
 {% endblock %}
