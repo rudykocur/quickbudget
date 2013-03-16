@@ -6,6 +6,166 @@
 {% endblock %}
 
 {% block content %}
-HOWDY !!!!
+
+<style>
+
+    body {
+        /*overflow: hidden;*/
+        font-family: Verdana;
+    }
+
+    #connectArea {
+        overflow: auto;
+    }
+
+    #connectArea ul {
+        /*border: solid 1px black;*/
+    }
+
+    #receiptListContainer {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        overflow: auto;
+        width: 400px;
+    }
+
+    #receiptList {
+
+    }
+
+    #receiptList li {
+        /*display: table-row;*/
+        /*border: solid 3px transparent;*/
+        position: relative;
+        padding: 5px 5px;
+
+        border-bottom: solid 1px black;
+    }
+
+    #receiptList li:hover {
+        background: #d0d0d0;
+    }
+
+    #receiptList span {
+        /*display: table-cell;*/
+        /*margin: 2px 2px;*/
+        /*border-bottom: solid 1px #d0d0d0;*/
+    }
+
+    #receiptList .date {
+        display: block;
+    }
+
+    #receiptList .title {
+        display: block;
+        padding-left: 20px;
+        margin-top: 5px;
+    }
+
+    #receiptList .total {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+
+    }
+
+    #imagesArea {
+        margin-left: 400px;
+    }
+
+    #imagesAreaContainer {
+    }
+
+    #imagePreview {
+        background: yellow;
+    }
+
+    #imageListContainer {
+        position: relative;
+        background: green;
+
+    }
+
+    #imageListContainer > .scrollarea {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        overflow: hidden;
+        overflow-x: auto;
+
+    }
+
+    #imageList {
+        /*display: table;*/
+        white-space: nowrap;
+    }
+    #imageList li {
+        /*display: table-cell;*/
+        display: inline-block;
+    }
+
+</style>
+
+<div id="connectArea">
+    <div id="receiptListContainer">
+        <ul id="receiptList">
+            {% for receipt in receipts %}
+                <li><span class="date">{{receipt.date}}</span><span class="title">{{ receipt.note }}</span><span class="total">{{ receipt.total }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="imagesArea">
+        <div id="imagesAreaContainer">
+
+            <div id="imagePreview">
+                Image preview
+            </div>
+            <div id="imageListContainer">
+                <div class="scrollarea">
+
+                    <ul id="imageList">
+                        {% for image in images %}
+                            <li><img src="/receipt_thumb/{{image.uid}}"/></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script language="javascript">
+    function autoResizeDiv()
+    {
+        var winSize = window.getSize().y;
+        var scrollSize = getScrollBarWidth();
+
+        //document.body.style.height = window.innerHeight +'px';
+        $('receiptListContainer').setStyle('height', winSize);
+
+        var scrollArea = $('imageListContainer').getElement('.scrollarea');
+
+        scrollArea.setStyle('width', $('imagesAreaContainer').getSize().x);
+
+        console.log('OMG', scrollArea.getSize().y, '::', scrollSize);
+        $('imageListContainer').setStyle('height', scrollArea.getSize().y);
+        $('imagePreview').setStyle('height', winSize - $('imageListContainer').getSize().y);
+    }
+    window.onresize = autoResizeDiv;
+    autoResizeDiv();
+
+//    $(window).addEvent('domready', function() {
+//        autoResizeDiv();
+//    });
+
+    $(window).addEvent('load', function() {
+        console.log('YYY');
+        autoResizeDiv();
+        autoResizeDiv();
+    });
+</script>
 
 {% endblock %}

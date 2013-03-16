@@ -2,8 +2,13 @@
 import os
 import json
 
+import Image
+import StringIO
 
-from flask import render_template, jsonify, request, redirect, url_for
+from flask import render_template, jsonify, request, redirect, url_for, Response
+
+from quickbudget.schema import Receipt, ReceiptImage
+from quickbudget.file import RECEIPT_IMAGE_FOLDER
 
 
 _routerList = []
@@ -19,13 +24,32 @@ def router(rule, **options):
 
 @router('/')
 def main():
-    return render_template('index.html')
+    receipts = Receipt.allWithoutImage()
+    images = ReceiptImage.allWithoutReceipt()
+
+    return render_template('index.html', receipts=receipts, images=images[:15])
 
 @router('/import')
 def importer():
 
     return render_template('importer.html')
 
+@router('/receipt_thumb/<receipt_uid>')
+def receipt_thumb(receipt_uid):
+    print '!!!!!', receipt_uid
+
+    img = ReceiptImage.get(receipt_uid)
+    imgPath = os.path.join(RECEIPT_IMAGE_FOLDER, img.contentPath)
+
+    thumbFile = StringIO.StringIO()
+
+    im = Image.open(imgPath)
+    im.thumbnail((200, 200), Image.ANTIALIAS)
+    im.save(thumbFile, "JPEG")
+
+    thumbFile.seek(0)
+
+    return Response(thumbFile, mimetype="image/jpeg", direct_passthrough=True)
 
 
 def init_routing(app):

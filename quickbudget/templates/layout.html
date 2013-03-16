@@ -5,7 +5,8 @@
   	
     <link rel="stylesheet" href="{{ url_for('static', filename='reset.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    
+
+    <script src="{{ url_for('static', filename='utils.js') }}"></script>
     <script src="{{ url_for('static', filename='moo-core.js') }}"></script>
     <script src="{{ url_for('static', filename='mootools-more-1.4.0.1.js') }}"></script>
     
@@ -14,9 +15,11 @@
     {% block head %}{% endblock %}
   </head>
 <body>
+<!--
     <div id="nav">
         <a href="{{ url_for('main') }}">Home</a> | <a href="{{ url_for('importer') }}">Load operations</a>
     </div>
+    -->
   <div id="content">{% block content %}{% endblock %}</div>
   
   <!-- 
