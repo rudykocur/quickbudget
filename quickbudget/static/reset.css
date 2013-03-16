@@ -48,3 +48,51 @@ table {
         border-collapse: collapse;
         border-spacing: 0;
 }
+
+
+
+
+/*
+ * CUSTOM COMMON STYLES
+ */
+
+
+body {
+    /*overflow: hidden;*/
+    font-family: Verdana;
+}
+
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+.clearfix {
+    display: inline-block;
+}
+
+html[xmlns] .clearfix {
+    display: block;
+}
+
+* html .clearfix {
+    height: 1%;
+}
+
+.mask {
+    position: absolute;
+    filter: alpha(opacity=90);
+    -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
+z-index: 990;
+background-color: rgba(0,0,0,0.7);
+    }
+
+
+strong {
+    font-weight: bold;
+}

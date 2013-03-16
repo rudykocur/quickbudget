@@ -35,8 +35,6 @@ def importer():
 
 @router('/receipt_thumb/<receipt_uid>')
 def receipt_thumb(receipt_uid):
-    print '!!!!!', receipt_uid
-
     img = ReceiptImage.get(receipt_uid)
     imgPath = os.path.join(RECEIPT_IMAGE_FOLDER, img.contentPath)
 

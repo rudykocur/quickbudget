@@ -1,0 +1,98 @@
+
+
+#connectArea {
+  overflow: auto;
+
+  #receiptListContainer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    overflow: auto;
+    width: 400px;
+  }
+
+  #receiptList {
+
+  }
+
+  #receiptList li {
+  /*display: table-row;*/
+  /*border: solid 3px transparent;*/
+    position: relative;
+    padding: 5px 5px;
+
+    border-bottom: solid 1px black;
+
+    &:hover {
+      background: #d0d0d0;
+    }
+
+
+    .date {
+      display: block;
+    }
+
+    .title {
+      display: block;
+      padding-left: 20px;
+      margin-top: 5px;
+    }
+
+    .total {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+
+    }
+  }
+
+
+  #imagesArea {
+    margin-left: 400px;
+
+    #imagesAreaContainer {
+    }
+
+    #imagePreview {
+      background: yellow;
+    }
+
+    #imageListContainer {
+      position: relative;
+      background: green;
+
+      .scrollarea {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        overflow: hidden;
+        overflow-x: auto;
+
+        #imageList {
+        /*display: table;*/
+          white-space: nowrap;
+
+          li {
+          /*display: table-cell;*/
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+
+            text-align: center;
+
+            &:hover {
+              background: blue;
+            }
+
+            img {
+              vertical-align: top;
+            }
+          }
+        }
+
+      }
+
+    }
+  }
+}
