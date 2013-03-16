@@ -1,4 +1,3 @@
-import os
 import datetime
 
 from sqlalchemy import Column, Integer, Unicode, ForeignKey, Numeric, DateTime, Date
@@ -30,7 +29,6 @@ class Recipe(DeclarativeBase):
     __tablename__ = 'recipe'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    uid = Column(Unicode, unique=True)
 
     total = Column(Numeric(18, 2), nullable=False)
     date = Column(Date, nullable=True)
