@@ -31,7 +31,6 @@ def main():
 
 @router('/import')
 def importer():
-
     return render_template('importer.html')
 
 @router('/receipt_thumb/<receipt_uid>')
@@ -41,15 +40,14 @@ def receipt_thumb(receipt_uid):
     img = ReceiptImage.get(receipt_uid)
     imgPath = os.path.join(RECEIPT_IMAGE_FOLDER, img.contentPath)
 
-    thumbFile = StringIO.StringIO()
+    thumbPath = '%s.thumb' % (imgPath, )
 
-    im = Image.open(imgPath)
-    im.thumbnail((200, 200), Image.ANTIALIAS)
-    im.save(thumbFile, "JPEG")
+    if not os.path.exists(thumbPath):
+        im = Image.open(imgPath)
+        im.thumbnail((200, 200), Image.ANTIALIAS)
+        im.save(thumbPath, "JPEG")
 
-    thumbFile.seek(0)
-
-    return Response(thumbFile, mimetype="image/jpeg", direct_passthrough=True)
+    return Response(file(thumbPath, 'r'), mimetype="image/jpeg", direct_passthrough=True)
 
 
 def init_routing(app):

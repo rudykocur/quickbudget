@@ -104,6 +104,18 @@
     #imageList li {
         /*display: table-cell;*/
         display: inline-block;
+        width: 200px;
+        height: 200px;
+
+        text-align: center;
+    }
+
+    #imageList li:hover {
+        background: blue;
+    }
+
+    #imageList img {
+        vertical-align: top;
     }
 
 </style>
@@ -140,11 +152,11 @@
 <script language="javascript">
     function autoResizeDiv()
     {
-        var winSize = window.getSize().y;
+        var availableHeight = window.getSize().y;
         var scrollSize = getScrollBarWidth();
 
         //document.body.style.height = window.innerHeight +'px';
-        $('receiptListContainer').setStyle('height', winSize);
+        $('receiptListContainer').setStyle('height', availableHeight);
 
         var scrollArea = $('imageListContainer').getElement('.scrollarea');
 
@@ -152,7 +164,7 @@
 
         console.log('OMG', scrollArea.getSize().y, '::', scrollSize);
         $('imageListContainer').setStyle('height', scrollArea.getSize().y);
-        $('imagePreview').setStyle('height', winSize - $('imageListContainer').getSize().y);
+        $('imagePreview').setStyle('height', availableHeight - $('imageListContainer').getSize().y);
     }
     window.onresize = autoResizeDiv;
     autoResizeDiv();
