@@ -76,7 +76,6 @@ def importPekaoCreditCard(filepath, session):
                 recipe.total = amount
                 recipe.date = transDate
                 recipe.note = description
-                recipe.uid = refNum
 
                 recipeImport = RecipeImportData(recipe, bankImport, refNum, rowNum)
 
