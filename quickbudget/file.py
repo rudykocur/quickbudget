@@ -6,6 +6,8 @@ import hashlib
 import shutil
 
 BANK_IMPORT_FOLDER = os.path.join('quickbudget', 'data', 'import')
+RECEIPT_IMAGE_FOLDER = os.path.join('quickbudget', 'data', 'receipt')
+
 
 def crcContent(data):
     prev = 0

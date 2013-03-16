@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from quickbudget.db import Base as DeclarativeBase
 
 
-class RecipeImage(DeclarativeBase):
+class ReceiptImage(DeclarativeBase):
     __tablename__ = 'recipe_image'
 
     #id = Column(Integer, primary_key=True, autoincrement=True)
@@ -18,14 +18,28 @@ class RecipeImage(DeclarativeBase):
     md5 = Column(Unicode)
     #created = Column(DateTime)
 
-    recipe = relationship("Recipe")
+    receipt = relationship("Receipt")
 
     def __init__(self, uid, contentPath):
         self.uid = uid
         self.contentPath = contentPath
 
+    @classmethod
+    def get(cls, uid):
+        """
 
-class Recipe(DeclarativeBase):
+        :param uid:
+        :return: Loaded image
+        :rtype: ReceiptImage
+        """
+        return cls.query.filter(cls.uid == uid).one()
+
+    @classmethod
+    def allWithoutReceipt(cls):
+        return cls.query.filter(cls.receipt == None).all()
+
+
+class Receipt(DeclarativeBase):
     __tablename__ = 'recipe'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -36,10 +50,15 @@ class Recipe(DeclarativeBase):
 
     expenseCategoryId = Column(Integer, ForeignKey('expense_category.id', name='expense_category'), nullable=True)
 
-    recipeImportData = relationship("RecipeImportData")
-    image = relationship("RecipeImage")
+    recipeImportData = relationship("ReceiptImportData")
+    image = relationship("ReceiptImage")
     #parts = relationship("RecipePart")
     expenseCategory = relationship("ExpenseCategory")
+
+    @classmethod
+    def allWithoutImage(cls):
+        return cls.query.filter(cls.image == None).all()
+
 
 # class RecipePart(DeclarativeBase):
 #     __tablename__ = 'recipe_part'
@@ -65,7 +84,7 @@ class ExpenseCategory(DeclarativeBase):
         self.name = name
 
 
-class RecipeImportData(DeclarativeBase):
+class ReceiptImportData(DeclarativeBase):
     __tablename__ = 'recipe_import_data'
 
     recipeId = Column(Integer, ForeignKey('recipe.id'), primary_key=True)
@@ -74,11 +93,11 @@ class RecipeImportData(DeclarativeBase):
     uid = Column(Unicode, unique=True)
     importLine = Column(Integer, nullable=False)
 
-    recipe = relationship("Recipe")
+    receipt = relationship("Receipt")
     bankImport = relationship("BankImportHistory")
 
-    def __init__(self, recipe, bankImport, uid, line):
-        self.recipe = recipe
+    def __init__(self, receipt, bankImport, uid, line):
+        self.receipt = receipt
         self.bankImport = bankImport
         self.uid = uid
         self.importLine = line

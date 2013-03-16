@@ -5,8 +5,6 @@ import re
 import os
 import datetime
 import decimal
-import shutil
-import hashlib
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -15,7 +13,7 @@ from quickbudget import csv_util
 from quickbudget.enums import IMPORTTYPE, IMPORTSTATUS
 from quickbudget.file import identifyFile, archiveBankImport, BANK_IMPORT_FOLDER
 
-from quickbudget.schema import BankImportHistory, Recipe, RecipeImportData
+from quickbudget.schema import BankImportHistory, Receipt, ReceiptImportData
 
 
 def importPekaoCreditCard(filepath, session):
@@ -69,15 +67,15 @@ def importPekaoCreditCard(filepath, session):
                 continue
 
             try:
-                RecipeImportData.get(refNum)
+                ReceiptImportData.get(refNum)
                 print 'SKIPPED ROW', rowNum, '- imported already'
             except NoResultFound:
-                recipe = Recipe()
+                recipe = Receipt()
                 recipe.total = amount
                 recipe.date = transDate
                 recipe.note = description
 
-                recipeImport = RecipeImportData(recipe, bankImport, refNum, rowNum)
+                recipeImport = ReceiptImportData(recipe, bankImport, refNum, rowNum)
 
                 session.add(recipe)
                 session.add(recipeImport)

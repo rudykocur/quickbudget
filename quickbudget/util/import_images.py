@@ -9,7 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from quickbudget import db
 from quickbudget import gdrive
 from quickbudget.db import db_session
-from quickbudget.schema import RecipeImage
+from quickbudget.schema import ReceiptImage
 
 
 def crcContent(data):
@@ -38,7 +38,7 @@ def importAll(srv, folderId):
         result['total'] += 1
 
         try:
-            savedImage = RecipeImage.query.filter(RecipeImage.uid == img['id']).one()
+            savedImage = ReceiptImage.query.filter(ReceiptImage.uid == img['id']).one()
             print 'FILE ID', img['id'], 'already known', savedImage.crc, '::', savedImage.md5
         except NoResultFound:
             content = gdrive.download_file(srv, img['downloadUrl'])
@@ -46,7 +46,7 @@ def importAll(srv, folderId):
             crc = crcContent(content)
 
             try:
-                savedDuplicate = RecipeImage.query.filter(RecipeImage.crc == crc and RecipeImage.md5 == md5).one()
+                savedDuplicate = ReceiptImage.query.filter(ReceiptImage.crc == crc and ReceiptImage.md5 == md5).one()
                 print 'PROPABLY A DUPLICATE', img['id'], ':: Other one:', savedDuplicate.uid
                 result['duplicate'] += 1
             except NoResultFound:
@@ -58,7 +58,7 @@ def importAll(srv, folderId):
                     f.write(content)
 
                 print 'NEW FILE', img['id'], 'at', fullPath
-                image = RecipeImage(img['id'], filename)
+                image = ReceiptImage(img['id'], filename)
                 image.crc = crc
                 image.md5 = md5
 
