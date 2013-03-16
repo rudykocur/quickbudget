@@ -36,13 +36,12 @@ class Recipe(DeclarativeBase):
     date = Column(Date, nullable=True)
     note = Column(Unicode)
 
-    #expenseCategoryId = Column(Integer, ForeignKey('expense_category.id'), nullable=True)
+    expenseCategoryId = Column(Integer, ForeignKey('expense_category.id', name='expense_category'), nullable=True)
 
     recipeImportData = relationship("RecipeImportData")
-
     image = relationship("RecipeImage")
     #parts = relationship("RecipePart")
-    #expenseCategory = relationship("ExpenseCategory")
+    expenseCategory = relationship("ExpenseCategory")
 
 # class RecipePart(DeclarativeBase):
 #     __tablename__ = 'recipe_part'
@@ -56,14 +55,16 @@ class Recipe(DeclarativeBase):
 #
 #     recipe = relationship("Recipe")
 #     expenseCategory = relationship("ExpenseCategory")
-#
-# class ExpenseCategory(DeclarativeBase):
-#     __tablename__ = 'expense_category'
-#
-#     id = Column(Integer, primary_key=True, autoincrement=True)
-#     name = Column(Unicode)
-#
-#
+
+
+class ExpenseCategory(DeclarativeBase):
+    __tablename__ = 'expense_category'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(Unicode, nullable=False, unique=True)
+
+    def __init__(self, name):
+        self.name = name
 
 
 class RecipeImportData(DeclarativeBase):
