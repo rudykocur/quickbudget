@@ -24,7 +24,7 @@ var IndexController = (function() {
             preview.grab(img);
 
             img.setStyle('opacity', 0);
-            img.setStyle('display', 'block');
+            img.setStyle('display', null);
 
             //img.setStyle('display', null);
             //new Fx.Morph(img, {styles: []}).reveal();
@@ -45,7 +45,6 @@ var IndexController = (function() {
 
         if(oldImg) {
             oldImg.fade('out').get('tween').chain(function() {
-                //alert('OMG GONE !!');
                 oldImg.destroy();
                 _loadImage(uid);
             });
