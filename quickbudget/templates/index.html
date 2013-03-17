@@ -2,6 +2,7 @@
 {% block title %}Home{% endblock %}
 {% block head %}
 
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
 
 {% endblock %}
 
@@ -23,19 +24,30 @@
     </div>
     <div id="imagesArea">
         <div class="actions">
-            <a class="button blue" href="#1">Connect</a>
-            <span class="spacer" >&nbsp;</span>
-            <a class="button blue" href="#2">test 2</a>
+            <div class="group">
+                <a href="#1">Connect</a>
+                <a href="#1">Cash</a>
+            </div>
+            <div class="group">
+                <a data-actionType="rotate_left" href="#2">Rotate left</a>
+                <a data-actionType="rotate_right" href="#2">Rotate right</a>
+
+                <a data-actionType="zoom_in" href="#2">Zoom in</a>
+                <a data-actionType="zoom_out" href="#2">Zoom out</a>
+
+            </div>
         </div>
         <div id="imagePreview">
-            Image preview
+
         </div>
         <div id="imageListContainer">
             <div class="scrollarea">
 
                 <ul id="imageList">
                     {% for image in images %}
-                        <li><img src="/receipt_thumb/{{image.uid}}"/></li>
+                        <li>
+                            <img src="/receipt_thumb/{{image.uid}}/thumb" data-imguid="{{image.uid}}"/>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
@@ -46,38 +58,26 @@
 
 
 <script language="javascript">
-    function autoResizeDiv()
-    {
-        var availableHeight = $(window).getSize().y;
-        var scrollSize = getScrollBarWidth();
-
-        var mainArea = $('connectArea');
-
-        availableHeight -= mainArea.getPosition().y;
-
-        $('receiptListContainer').setStyle('height', availableHeight);
-
-        var scrollArea = $('imageListContainer').getElement('.scrollarea');
-
-        scrollArea.setStyle('width', $('imagesArea').getSize().x);
-
-        //console.log('OMG', scrollArea.getSize().y, '::', scrollSize);
-        $('imageListContainer').setStyle('height', scrollArea.getSize().y);
-
-        var previewSize = availableHeight;
-        previewSize -= $('imageListContainer').getSize().y;
-        previewSize -= $('imagesArea').getElement('.actions').getSize().y;
-
-        $('imagePreview').setStyle('height', previewSize);
-    }
-    $(window).addEvent('resize',autoResizeDiv);
+    $(window).addEvent('resize',IndexController.resizeWorkingArea);
 
     $(window).addEvent('load', function() {
-        autoResizeDiv();
-        autoResizeDiv();
+        IndexController.resizeWorkingArea(); // this sets layout almost perfect, but takes into account scrollbar
+                                             // which hides in some point
+
+        IndexController.resizeWorkingArea(); // now we recalculate layout without scrollbar, so everything now fits
+                                             // perfectly
     });
 
-    autoResizeDiv();
+    //IndexController.resizeWorkingArea();
+
+
+    $(window).addEvent('domready', function() {
+        IndexController.initializePanView();
+        IndexController.initializeActionsHandlers();
+        IndexController.initializeThumbnailSwitcher();
+
+        IndexController.loadImage('0B_V-GNTsCHGEclljQWdZQ1ZwNHM');
+    });
 </script>
 
 {% endblock %}

@@ -62,9 +62,16 @@
 }
 
 #nav {
-    margin: 5px;
+    margin: 5px 5px 0px 5px;
+    padding-bottom: 10px;
+    border-bottom: solid 2px black;
     li {
         display: inline-block;
+
+        a {
+            .button;
+            .orange;
+        }
     }
 }
 
@@ -104,7 +111,7 @@
         .title {
             display: block;
             padding-left: 20px;
-            margin-top: 5px;
+            margin-top: 10px;
         }
 
         .total {
@@ -121,15 +128,26 @@
         .actions {
             padding:  5px;
 
-            .spacer {
+            .group {
                 display: inline-block;
-                width: 2px;
-                background: red;
+                border-left: solid 2px red;
+                padding-left: 5px;
+            }
+
+            .group:first-child {
+                border-left: none;
+                padding-left: 0;
+            }
+
+            a {
+                .button;
+                .blue;
             }
         }
 
         #imagePreview {
             background: yellow;
+            overflow: hidden;
         }
 
         #imageListContainer {
@@ -149,10 +167,9 @@
                     white-space: nowrap;
 
                     li {
-                    /*display: table-cell;*/
                         display: inline-block;
-                        width: 200px;
-                        height: 200px;
+                        width: 100px;
+                        height: 100px;
 
                         text-align: center;
 
@@ -162,6 +179,7 @@
 
                         img {
                             vertical-align: top;
+                            cursor: pointer;
                         }
                     }
                 }
