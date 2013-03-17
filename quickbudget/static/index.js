@@ -144,6 +144,31 @@ var IndexController = (function() {
                 IndexController.loadImage(imgUid);
             }
         });
+
+        var scrollable = $('imageListContainer').getElement('.scrollarea');
+
+        $('imageListContainer').addEvent('mousewheel', function(e) {
+            var isDown;
+
+            if(e.event.wheelDelta) {
+                isDown = (e.event.wheelDelta < 0);
+            }
+            else if(e.event.detail) {
+                isDown = (e.event.detail > 0);
+            }
+
+            if(typeof isDown !== 'undefined') {
+                var s = scrollable.getScroll();
+
+                if(isDown) {
+                    scrollable.scrollTo(s.x + 50, s.y);
+                }
+                else {
+                    scrollable.scrollTo(s.x - 50, s.y);
+                }
+            }
+
+        })
     };
 
 

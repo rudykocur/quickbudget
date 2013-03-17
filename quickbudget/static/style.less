@@ -146,18 +146,19 @@
         }
 
         #imagePreview {
-            background: yellow;
+//            background: yellow;
             overflow: hidden;
             text-align: center;
         }
 
         #imageListContainer {
             position: relative;
-            background: green;
+            padding-top: 5px;
+//            background: green;
 
             .scrollarea {
                 position: absolute;
-                top: 0;
+                top: 5px;
                 left: 0;
 
                 overflow: hidden;
@@ -166,16 +167,18 @@
                 #imageList {
                 /*display: table;*/
                     white-space: nowrap;
+                    margin-bottom: 5px;
 
                     li {
                         display: inline-block;
                         width: 100px;
                         height: 100px;
+                        border: 1px solid #707070;
 
                         text-align: center;
 
                         &:hover {
-                            background: blue;
+                            background: #D0D0D0;
                         }
 
                         img {
