@@ -3,44 +3,68 @@
 
 var IndexController = (function() {
 
+    /**
+     * @param url {String}
+     */
+    var _addRandomToUrl = function(url) {
+        if(url.indexOf('?') > 0) {
+            var params = {};
+            url.substr(url.indexOf('?')+1).split('&').each(function(x) {
+                var parts = x.split('=');
+                params[parts[0]] = parts[1];
+            });
+
+            params['_random'] = Math.random();
+
+            return url.substr(0, url.indexOf('?')) + Object.toQueryString(params);
+        }
+        else {
+            return url + '?_random=' + Math.random();
+        }
+
+
+    };
+
     var _loadImage = function(uid) {
         var preview = $('imagePreview');
 
-        var img = new Element('img', {'data-uid': uid});
+        var imgSrc = '/receipt_thumb/'+uid+'/full?_random=' + Math.random();
 
-        img.addEvent('load', function() {
-            var availSize = preview.getSize();
-            var imgSize = img.getDimensions();
+        Asset.image(imgSrc, {
+            onLoad: function() {
+                var img = new Element('img', {'data-uid': uid, src: imgSrc});
 
-            var ratio = availSize.x / imgSize.width;
+                preview.grab(img);
+                img.setStyle('opacity', 0);
 
-            img.setStyles({
-                width: imgSize.width * ratio,
-                height: imgSize.height * ratio
-            });
+                var availSize = preview.getSize();
+                var imgSize = img.getDimensions();
+
+                var ratio = availSize.x / imgSize.width;
+
+                img.setStyles({
+                    width: imgSize.width * ratio,
+                    height: imgSize.height * ratio
+                });
 
 
 
-            preview.grab(img);
-
-            img.setStyle('opacity', 0);
-            img.setStyle('display', null);
-
-            //img.setStyle('display', null);
-            //new Fx.Morph(img, {styles: []}).reveal();
-            img.fade('in');
+                img.fade('in');
+            }
         });
+    };
 
-        img.setStyle('display', 'none');
-        img.src = '/receipt_thumb/'+uid+'/full';
-        document.body.grab(img);
+    var _refreshThumbnail = function(imgUid) {
+        $('imageList').getElements('img').each(function(img) {
+            if(img.dataset['imguid'] == imgUid) {
+                img.src = _addRandomToUrl(img.src);
+            }
+        });
     };
 
     var pub = {};
 
     pub.loadImage = function(uid) {
-
-
         var oldImg = $('imagePreview').getElement('img');
 
         if(oldImg) {
@@ -123,12 +147,7 @@ var IndexController = (function() {
                     method: 'GET',
                     onSuccess: function() {
                         IndexController.loadImage(imgUid);
-
-                        $('imageList').getElements('img').each(function(img) {
-                            if(img.dataset['imguid'] == imgUid) {
-                                img.src = img.src;
-                            }
-                        });
+                        _refreshThumbnail(imgUid);
                     }
                 }).send();
             }
