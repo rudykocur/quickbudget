@@ -17,6 +17,7 @@ def crcContent(data):
     prev = zlib.crc32(data, prev)
     return u"%X" % (prev & 0xFFFFFFFF)
 
+
 def importAll(srv, folderId):
     storagePath = os.path.join('quickbudget', 'data', 'receipt')
     if not os.path.exists(storagePath):
@@ -71,8 +72,6 @@ def importAll(srv, folderId):
         print
 
     return result
-
-
 
 if __name__ == '__main__':
     db.init_db()

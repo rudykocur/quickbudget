@@ -113,3 +113,75 @@ var dragHandler = function(params) {
 
     return pub;
 };
+
+Ui = (function(){
+    var pub = {};
+
+    pub.openModalDialog = function(dialog) {
+        var content = new Element('div', {'class':'mask_content'});
+        document.body.grab(content);
+
+        var maskTarget = document.body;
+
+        var mask = new Mask(maskTarget, {
+            onShow: function() {
+                content.grab($(dialog));
+
+                content.position({
+                    relativeTo: $(this).getParent(),
+                    position: 'center'
+                });
+            },
+            onHide: function() {
+                content.empty();
+                content.destroy();
+            }
+        });
+
+        dialog.addEvent('modalclose', function() {
+            mask.hide();
+        });
+
+        mask.show();
+    };
+
+    /**
+     *
+     * @param {Element|String} message
+     * @param {Object} [options]
+     * @config {Integer} [width]
+     * @config {Function} [onDone]
+     * @config {String} [okText]
+     */
+    pub.messageDialog = function(message, options) {
+        options = options || {};
+        var dialog = new Element('div', {'class':'modalDialog'});
+        var content = message;
+
+        if(! (content instanceof Element)) {
+            content = new Element('div', {html:message});
+        }
+        if(options.width) {
+            dialog.setStyle('width', options.width+'px');
+        }
+
+        var onDone = function(e) {
+            e.stop();
+            if(options.onDone) {
+                options.onDone();
+            }
+            dialog.fireEvent('modalclose');
+        };
+
+        var btnOk = new Element('button', {text: options.okText||'Ok'});
+
+        btnOk.addEvent('click', onDone);
+
+        dialog.grab(content);
+        dialog.grab(new Element('div', {'class':'buttons'}).adopt([btnOk]));
+
+        pub.openModalDialog(dialog);
+    };
+
+    return pub;
+})();

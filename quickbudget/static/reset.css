@@ -88,9 +88,14 @@ html[xmlns] .clearfix {
     position: absolute;
     filter: alpha(opacity=90);
     -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=90);
-z-index: 990;
-background-color: rgba(0,0,0,0.7);
-    }
+    z-index: 990;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.mask_content {
+    z-index: 999;
+    background: #fff;
+}
 
 
 strong {

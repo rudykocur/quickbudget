@@ -161,6 +161,13 @@ var IndexController = (function() {
 
             if(imgUid) {
                 IndexController.loadImage(imgUid);
+
+                var selected = e.target.getParent('ul').getElement('.selected');
+                if(selected) {
+                    selected.removeClass('selected');
+                }
+
+                e.target.getParent('li').addClass('selected');
             }
         });
 
@@ -188,6 +195,12 @@ var IndexController = (function() {
             }
 
         })
+    };
+
+    pub.loadFirstThumbnail= function() {
+        var img = $('imageList').getElement('img');
+
+        pub.loadImage(img.dataset['imguid']);
     };
 
 
