@@ -169,11 +169,15 @@ body {
 
     #receiptList li {
         position: relative;
-
         border-bottom: solid 1px black;
+        cursor: pointer;
 
         &:hover {
             background: #d0d0d0;
+        }
+
+        &.selected {
+          background: #a0a0a0;
         }
 
         .date {
@@ -222,9 +226,7 @@ body {
 
         #imageList {
 
-            &.selected {
-                background: red;
-            }
+
 
             li {
                 display: inline-block;
@@ -236,6 +238,10 @@ body {
 
                 &:hover {
                     background: #D0D0D0;
+                }
+
+                &.selected {
+                    background: red;
                 }
 
                 img {

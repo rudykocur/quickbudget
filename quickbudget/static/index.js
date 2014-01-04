@@ -2,6 +2,7 @@
 
 
 var IndexController = (function() {
+    'use strict';
 
     var actionHandlers = {
         zoom_in: function() {
@@ -28,8 +29,8 @@ var IndexController = (function() {
                 url: '/receipt_rotate/'+imgUid+'/' + direction,
                 method: 'GET',
                 onSuccess: function() {
-                    IndexController.loadImage(imgUid);
-                    _refreshThumbnail(imgUid);
+                    IndexController.ImageManager.loadImage(imgUid);
+                    IndexController.ImageManager.refreshThumbnail(imgUid);
                 }
             }).send();
         },
@@ -43,12 +44,46 @@ var IndexController = (function() {
                 url: '/receipt_rotate/'+imgUid+'/' + direction,
                 method: 'GET',
                 onSuccess: function() {
-                    IndexController.loadImage(imgUid);
-                    _refreshThumbnail(imgUid);
+                    IndexController.ImageManager.loadImage(imgUid);
+                    IndexController.ImageManager.refreshThumbnail(imgUid);
                 }
             }).send();
         }
     };
+
+    var pub = {};
+
+    pub.init = function() {
+        pub.initializeActionsHandlers();
+
+        pub.ImageManager.initializePanView();
+        pub.ImageManager.initializeThumbnailSwitcher();
+        pub.ImageManager.initializeHorizontalScroll();
+        pub.ImageManager.loadFirstThumbnail();
+
+        pub.ReceipitManager.initializeReceiptSelector();
+    };
+
+    pub.initializeActionsHandlers = function() {
+        $('imagesArea').getElement('.actions').addEvent('click', function(e) {
+            e.stop();
+
+            var actionType = e.target.dataset['actiontype'];
+
+            if(typeof actionHandlers[actionType] !== 'undefined') {
+                actionHandlers[actionType]();
+            }
+        });
+    };
+
+    return pub;
+
+})();
+
+IndexController.ImageManager = (function() {
+    'use strict';
+
+    var pub = {};
 
     var _loadImage = function(uid) {
         var preview = $('imagePreview');
@@ -79,15 +114,13 @@ var IndexController = (function() {
         });
     };
 
-    var _refreshThumbnail = function(imgUid) {
+    pub.refreshThumbnail = function(imgUid) {
         $('imageList').getElements('img').each(function(img) {
-            if(img.dataset['imguid'] == imgUid) {
+            if(img.dataset['imguid'] === imgUid) {
                 img.src = Utils.addRandomToUrl(img.src);
             }
         });
     };
-
-    var pub = {};
 
     pub.loadImage = function(uid) {
         var oldImg = $('imagePreview').getElement('img');
@@ -109,20 +142,10 @@ var IndexController = (function() {
 
         Utils.dragHandler({
             element: el,
-            onStart: function() {scrollStart = el.getScroll()},
-            onDrag: function(ev) {el.scrollTo(scrollStart.x-ev.diff.x, scrollStart.y-ev.diff.y)},
+            onStart: function() {scrollStart = el.getScroll();},
+            onDrag: function(ev) {el.scrollTo(scrollStart.x-ev.diff.x, scrollStart.y-ev.diff.y);},
             attach: true,
             name: "PanView" // for debugging purposes
-        });
-    };
-
-    pub.initializeActionsHandlers = function() {
-        $('imagesArea').getElement('.actions').addEvent('click', function(e) {
-            e.stop();
-
-            var actionType = e.target.dataset['actiontype'];
-
-            actionHandlers[actionType]();
         });
     };
 
@@ -132,7 +155,7 @@ var IndexController = (function() {
             var imgUid = e.target.dataset['imguid'];
 
             if(imgUid) {
-                IndexController.loadImage(imgUid);
+                pub.loadImage(imgUid);
 
                 var selected = e.target.getParent('ul').getElement('.selected');
                 if(selected) {
@@ -170,7 +193,7 @@ var IndexController = (function() {
                 }
             }
 
-        })
+        });
     };
 
     pub.loadFirstThumbnail= function() {
@@ -179,9 +202,29 @@ var IndexController = (function() {
         pub.loadImage(img.dataset['imguid']);
     };
 
-
     return pub;
-
 })();
 
+IndexController.ReceipitManager = (function() {
+    'use strict';
 
+    var selectedReceiptEl = null;
+
+    var pub = {};
+
+    pub.initializeReceiptSelector = function() {
+        $('receiptList').getElements('li').each(function(el) {
+            el.addEvent('click', function() {
+                if(selectedReceiptEl) {
+                    selectedReceiptEl.removeClass('selected');
+                }
+
+                selectedReceiptEl = el;
+
+                selectedReceiptEl.addClass('selected');
+            });
+        });
+    };
+
+    return pub;
+})();
