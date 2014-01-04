@@ -3,7 +3,7 @@ import os
 import json
 import glob
 
-import Image
+from PIL import Image
 import StringIO
 
 from flask import render_template, jsonify, request, redirect, url_for, Response

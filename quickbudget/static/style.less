@@ -1,3 +1,40 @@
+// Rudimentary styles
+
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+body {
+  margin: 0
+}
+
+.row, .col {
+  overflow: hidden;
+  position: absolute;
+}
+
+.row {
+  left: 0;
+  right: 0;
+}
+
+.col {
+  top: 0;
+  bottom: 0;
+}
+
+.scroll-x {
+  overflow-x: auto;
+}
+
+.scroll-y {
+  overflow-y: auto;
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+// Buttons rules
 
 .background-gradient (@from, @to) {
     background: -webkit-gradient(linear, left top, left bottom, from(@from), to(@to));
@@ -61,6 +98,9 @@
     }
 }
 
+// --------------------------------------------------------------------------------------------------------------------
+// Every-page styles
+
 #nav {
     margin: 5px 5px 0px 5px;
     padding-bottom: 10px;
@@ -75,28 +115,60 @@
     }
 }
 
+#content {
+  position: absolute;
+  top: 48px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+// Index-page layout rules
 
 #connectArea {
-    overflow: auto;
-    position: relative;
 
-    #receiptListContainer {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        overflow: auto;
-        width: 400px;
-    }
+}
 
+#receiptList {
+  width: 400px;
+}
+
+#imagesArea {
+  left: 400px;
+  right: 0
+}
+
+#imagesArea .actions {
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 31px;
+//  line-height: 40px;
+}
+
+#imagePreview {
+  top: 41px;
+  bottom: 120px;
+}
+
+#imageList {
+  bottom: 0;
+  height: 120px;
+  line-height: 120px;
+  white-space: nowrap;
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+// Index-page visual styles
+
+#connectArea {
     #receiptList {
 
     }
 
     #receiptList li {
-    /*display: table-row;*/
-    /*border: solid 3px transparent;*/
         position: relative;
-        padding: 5px 5px;
 
         border-bottom: solid 1px black;
 
@@ -123,10 +195,9 @@
     }
 
     #imagesArea {
-        margin-left: 400px;
 
         .actions {
-            padding:  5px;
+//            padding:  5px;
 
             .group {
                 display: inline-block;
@@ -146,54 +217,32 @@
         }
 
         #imagePreview {
-//            background: yellow;
-            overflow: hidden;
-            text-align: center;
+            background: yellow;
         }
 
-        #imageListContainer {
-            position: relative;
-            padding-top: 5px;
-//            background: green;
+        #imageList {
 
-            .scrollarea {
-                position: absolute;
-                top: 5px;
-                left: 0;
-
-                overflow: hidden;
-                overflow-x: auto;
-
-                #imageList {
-                /*display: table;*/
-                    white-space: nowrap;
-                    margin-bottom: 5px;
-
-                    li {
-                        display: inline-block;
-                        width: 100px;
-                        height: 100px;
-                        border: 1px solid #707070;
-
-                        text-align: center;
-
-                        &:hover {
-                            background: #D0D0D0;
-                        }
-
-                      &.selected {
-                        background: red;
-                      }
-
-                        img {
-                            vertical-align: top;
-                            cursor: pointer;
-                        }
-                    }
-                }
-
+            &.selected {
+                background: red;
             }
 
+            li {
+                display: inline-block;
+                width: 100px;
+                height: 100px;
+                border: 1px solid #707070;
+
+                text-align: center;
+
+                &:hover {
+                    background: #D0D0D0;
+                }
+
+                img {
+                    vertical-align: top;
+                    cursor: pointer;
+                }
+            }
         }
     }
 }

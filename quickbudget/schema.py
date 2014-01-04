@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, Integer, Unicode, ForeignKey, Numeric, DateTime, Date
+from sqlalchemy import Column, Integer, Unicode, ForeignKey, Numeric, DateTime, Date, desc
 from sqlalchemy.orm import relationship
 
 from quickbudget.db import Base as DeclarativeBase
@@ -57,7 +57,7 @@ class Receipt(DeclarativeBase):
 
     @classmethod
     def allWithoutImage(cls):
-        return cls.query.filter(cls.image == None).all()
+        return cls.query.filter(cls.image == None).order_by(desc(cls.date)).all()
 
 
 # class RecipePart(DeclarativeBase):

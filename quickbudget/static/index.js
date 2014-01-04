@@ -78,30 +78,6 @@ var IndexController = (function() {
         }
     };
 
-    pub.resizeWorkingArea = function() {
-        var availableHeight = $(window).getSize().y;
-        //var scrollSize = getScrollBarWidth();
-
-        var mainArea = $('connectArea');
-
-        availableHeight -= mainArea.getPosition().y;
-
-        $('receiptListContainer').setStyle('height', availableHeight);
-
-        var scrollArea = $('imageListContainer').getElement('.scrollarea');
-
-        scrollArea.setStyle('width', $('imagesArea').getSize().x);
-
-        //console.log('OMG', scrollArea.getSize().y, '::', scrollSize);
-        $('imageListContainer').setStyle('height', scrollArea.getSize().y);
-
-        var previewSize = availableHeight;
-        previewSize -= $('imageListContainer').getSize().y;
-        previewSize -= $('imagesArea').getElement('.actions').getSize().y;
-
-        $('imagePreview').setStyle('height', previewSize);
-    };
-
     pub.initializePanView = function() {
         var el = $('imagePreview');
         var scrollStart = null;
@@ -171,9 +147,13 @@ var IndexController = (function() {
             }
         });
 
-        var scrollable = $('imageListContainer').getElement('.scrollarea');
 
-        $('imageListContainer').addEvent('mousewheel', function(e) {
+    };
+
+    pub.initializeHorizontalScroll = function() {
+        var scrollable = $('imageList');
+
+        scrollable.addEvent('mousewheel', function(e) {
             var isDown;
 
             if(e.event.wheelDelta) {

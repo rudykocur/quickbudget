@@ -11,19 +11,18 @@
 
 
 <div id="connectArea">
-    <div id="receiptListContainer">
-        <ul id="receiptList">
-            {% for receipt in receipts %}
-                <li>
-                    <span class="date">{{ receipt.date }}</span>
-                    <span class="title">{{ receipt.note }}</span>
-                    <span class="total">{{ receipt.total }}</span>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div id="imagesArea">
-        <div class="actions">
+    <ul id="receiptList" class="col scroll-y">
+        {% for receipt in receipts %}
+            <li>
+                <span class="date">{{ receipt.date }}</span>
+                <span class="title">{{ receipt.note }}</span>
+                <span class="total">{{ receipt.total }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div id="imagesArea" class="col">
+        <div class="actions row">
             <div class="group">
                 <a href="#1" onclick="Ui.messageDialog('Connect screen'); return false;">Connect</a>
                 <a href="#2">Cash</a>
@@ -36,47 +35,29 @@
 
                 <a data-actionType="zoom_in" href="#2">Zoom in</a>
                 <a data-actionType="zoom_out" href="#2">Zoom out</a>
-
             </div>
         </div>
-        <div id="imagePreview">
+        <div id="imagePreview" class="row scroll-x scroll-y"></div>
 
-        </div>
-        <div id="imageListContainer">
-            <div class="scrollarea">
-
-                <ul id="imageList">
-                    {% for image in images %}
-                        <li>
-                            <img src="/receipt_thumb/{{image.uid}}/thumb" data-imguid="{{image.uid}}"/>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+        <ul id="imageList" class="row scroll-x">
+            {% for image in images %}
+                <li>
+                    <img src="/receipt_thumb/{{image.uid}}/thumb" data-imguid="{{image.uid}}"/>
+                </li>
+            {% endfor %}
+        </ul>
 
     </div>
 </div>
 
 
 <script language="javascript">
-    $(window).addEvent('resize',IndexController.resizeWorkingArea);
-
-    $(window).addEvent('load', function() {
-        IndexController.resizeWorkingArea(); // this sets layout almost perfect, but takes into account scrollbar
-                                             // which hides in some point
-
-        IndexController.resizeWorkingArea(); // now we recalculate layout without scrollbar, so everything now fits
-                                             // perfectly
-    });
-
-    //IndexController.resizeWorkingArea();
-
 
     $(window).addEvent('domready', function() {
         IndexController.initializePanView();
         IndexController.initializeActionsHandlers();
         IndexController.initializeThumbnailSwitcher();
+        IndexController.initializeHorizontalScroll();
 
         //IndexController.loadImage('0B_V-GNTsCHGEclljQWdZQ1ZwNHM');
         IndexController.loadFirstThumbnail();
