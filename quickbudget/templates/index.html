@@ -13,7 +13,7 @@
 <div id="connectArea">
     <ul id="receiptList" class="col scroll-y">
         {% for receipt in receipts %}
-            <li>
+            <li data-receiptid="{{ receipt.id }}">
                 <span class="date">{{ receipt.date }}</span>
                 <span class="title">{{ receipt.note }}</span>
                 <span class="total">{{ receipt.total }}</span>
@@ -30,11 +30,11 @@
                 <a href="#4">Ignore</a>
             </div>
             <div class="group">
-                <a data-actionType="rotate_left" href="#2">Rotate left</a>
-                <a data-actionType="rotate_right" href="#2">Rotate right</a>
+                <a data-actionType="rotate_left" href="#">Rotate left</a>
+                <a data-actionType="rotate_right" href="#">Rotate right</a>
 
-                <a data-actionType="zoom_in" href="#2">Zoom in</a>
-                <a data-actionType="zoom_out" href="#2">Zoom out</a>
+                <a data-actionType="zoom_in" href="#">Zoom in</a>
+                <a data-actionType="zoom_out" href="#">Zoom out</a>
             </div>
         </div>
         <div id="imagePreview" class="row scroll-x scroll-y"></div>

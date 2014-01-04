@@ -26,93 +26,115 @@ function getScrollBarWidth () {
     return (w1 - w2);
 }
 
+Utils = (function() {
+    var pub = {};
 
-/**
- * @param {Object} params initalization parameters.
- * @config {Element} element DOM Element to which drag handler (mouse events listeners) will be attached.
- * @config {Boolean} [attach] if handler shoud be automatically activated.
- * @config {Function} [onBeforeStart] callable invoked when user presses mouse button, but before actually starting drag.
- * Receives event object. When onBeforeStart returns false, dragging doesn't happen.
- * @config {Function} [onStart] callable invoked when user presses mouse button.
- * Receives object {position: {x: Number, y: Number}} when called.
- * @config {Function} [onDrag] callable invoked at each mouse move when dragging.
- * Receives object {element: Element, diff: {x: Number, y: Number}} when called.
- * @config {Function} [onEnd] callable invoked when user releases mouse button. No parameters passed.
- * @config {String} [name] for debug purposes
- *
- *
- */
-var dragHandler = function(params) {
-    var dragStart;
+    pub.addRandomToUrl = function(url) {
+        if(url.indexOf('?') > 0) {
+            var params = {};
+            url.substr(url.indexOf('?')+1).split('&').each(function(x) {
+                var parts = x.split('=');
+                params[parts[0]] = parts[1];
+            });
 
-    var mouseMove = function(e) {
-        e.stop();
+            params['_random'] = Math.random();
 
-        var diff = {
-            x: e.page.x - dragStart.x,
-            y: e.page.y - dragStart.y
+            return url.substr(0, url.indexOf('?')+1) + Object.toQueryString(params);
+        }
+        else {
+            return url + '?_random=' + Math.random();
+        }
+    };
+
+    /**
+     * @param {Object} params initalization parameters.
+     * @config {Element} element DOM Element to which drag handler (mouse events listeners) will be attached.
+     * @config {Boolean} [attach] if handler shoud be automatically activated.
+     * @config {Function} [onBeforeStart] callable invoked when user presses mouse button, but before actually starting drag.
+     * Receives event object. When onBeforeStart returns false, dragging doesn't happen.
+     * @config {Function} [onStart] callable invoked when user presses mouse button.
+     * Receives object {position: {x: Number, y: Number}} when called.
+     * @config {Function} [onDrag] callable invoked at each mouse move when dragging.
+     * Receives object {element: Element, diff: {x: Number, y: Number}} when called.
+     * @config {Function} [onEnd] callable invoked when user releases mouse button. No parameters passed.
+     * @config {String} [name] for debug purposes
+     *
+     *
+     */
+    pub.dragHandler = function(params) {
+        var dragStart;
+
+        var mouseMove = function(e) {
+            e.stop();
+
+            var diff = {
+                x: e.page.x - dragStart.x,
+                y: e.page.y - dragStart.y
+            };
+
+            params.onDrag({
+                element: params.element,
+                diff: diff
+            });
         };
 
-        params.onDrag({
-            element: params.element,
-            diff: diff
-        });
-    };
+        var startDragging = function(e) {
+            e.stop();
+            dragStart = e.page;
 
-    var startDragging = function(e) {
-        e.stop();
-        dragStart = e.page;
-
-        // XXX passing event breaks encapsulation a little bit...
-        // XXX better name than onBeforeStart...
-        if (params.onBeforeStart
-            && !params.onBeforeStart({event: e, element: params.element})) {
-            return;
-        }
-
-        document.addEvent('mousemove', mouseMove);
-        document.addEvent('mouseup', stopDragging);
-
-        if(params.onStart) {
-            params.onStart({position:dragStart});
-        }
-    };
-
-    var stopDragging = function(e) {
-        e.stop();
-
-        document.removeEvent('mousemove', mouseMove);
-        document.removeEvent('mouseup', stopDragging);
-
-        if(params.onEnd) {
-            params.onEnd();
-        }
-
-    };
-
-    var pub =  {
-        attach: function() {
-            params.element.addEvent('mousedown', startDragging);
-        },
-        detach: function() {
-            params.element.removeEvent('mousedown', startDragging);
-        },
-        setAttached: function(shoudAttach) {
-            if(shoudAttach) {
-                pub.attach();
+            // XXX passing event breaks encapsulation a little bit...
+            // XXX better name than onBeforeStart...
+            if (params.onBeforeStart
+                && !params.onBeforeStart({event: e, element: params.element})) {
+                return;
             }
-            else {
-                pub.detach();
-            }
-        }
-    };
 
-    if(params.attach) {
-        pub.attach();
-    }
+            document.addEvent('mousemove', mouseMove);
+            document.addEvent('mouseup', stopDragging);
+
+            if(params.onStart) {
+                params.onStart({position:dragStart});
+            }
+        };
+
+        var stopDragging = function(e) {
+            e.stop();
+
+            document.removeEvent('mousemove', mouseMove);
+            document.removeEvent('mouseup', stopDragging);
+
+            if(params.onEnd) {
+                params.onEnd();
+            }
+
+        };
+
+        var pub =  {
+            attach: function() {
+                params.element.addEvent('mousedown', startDragging);
+            },
+            detach: function() {
+                params.element.removeEvent('mousedown', startDragging);
+            },
+            setAttached: function(shoudAttach) {
+                if(shoudAttach) {
+                    pub.attach();
+                }
+                else {
+                    pub.detach();
+                }
+            }
+        };
+
+        if(params.attach) {
+            pub.attach();
+        }
+
+        return pub;
+    };
 
     return pub;
-};
+})();
 
 Ui = (function(){
     var pub = {};

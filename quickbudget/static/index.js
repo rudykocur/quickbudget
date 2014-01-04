@@ -3,26 +3,51 @@
 
 var IndexController = (function() {
 
-    /**
-     * @param url {String}
-     */
-    var _addRandomToUrl = function(url) {
-        if(url.indexOf('?') > 0) {
-            var params = {};
-            url.substr(url.indexOf('?')+1).split('&').each(function(x) {
-                var parts = x.split('=');
-                params[parts[0]] = parts[1];
+    var actionHandlers = {
+        zoom_in: function() {
+            var img = $('imagePreview').getElement('img');
+            img.setStyles({
+                width: img.getSize().x*2,
+                height: img.getSize().y *2
             });
+        },
+        zoom_out: function() {
+            var img = $('imagePreview').getElement('img');
+            img.setStyles({
+                width: img.getSize().x/2,
+                height: img.getSize().y/2
+            });
+        },
+        rotate_left: function() {
+            var img = $('imagePreview').getElement('img');
+            var imgUid = img.dataset['uid'];
 
-            params['_random'] = Math.random();
+            var direction = 'left';
 
-            return url.substr(0, url.indexOf('?')) + Object.toQueryString(params);
+            new Request({
+                url: '/receipt_rotate/'+imgUid+'/' + direction,
+                method: 'GET',
+                onSuccess: function() {
+                    IndexController.loadImage(imgUid);
+                    _refreshThumbnail(imgUid);
+                }
+            }).send();
+        },
+        rotate_right: function() {
+            var img = $('imagePreview').getElement('img');
+            var imgUid = img.dataset['uid'];
+
+            var direction = 'right';
+
+            new Request({
+                url: '/receipt_rotate/'+imgUid+'/' + direction,
+                method: 'GET',
+                onSuccess: function() {
+                    IndexController.loadImage(imgUid);
+                    _refreshThumbnail(imgUid);
+                }
+            }).send();
         }
-        else {
-            return url + '?_random=' + Math.random();
-        }
-
-
     };
 
     var _loadImage = function(uid) {
@@ -57,7 +82,7 @@ var IndexController = (function() {
     var _refreshThumbnail = function(imgUid) {
         $('imageList').getElements('img').each(function(img) {
             if(img.dataset['imguid'] == imgUid) {
-                img.src = _addRandomToUrl(img.src);
+                img.src = Utils.addRandomToUrl(img.src);
             }
         });
     };
@@ -82,7 +107,7 @@ var IndexController = (function() {
         var el = $('imagePreview');
         var scrollStart = null;
 
-        dragHandler({
+        Utils.dragHandler({
             element: el,
             onStart: function() {scrollStart = el.getScroll()},
             onDrag: function(ev) {el.scrollTo(scrollStart.x-ev.diff.x, scrollStart.y-ev.diff.y)},
@@ -93,40 +118,11 @@ var IndexController = (function() {
 
     pub.initializeActionsHandlers = function() {
         $('imagesArea').getElement('.actions').addEvent('click', function(e) {
-            var img = $('imagePreview').getElement('img');
-            var imgUid = img.dataset['uid'];
-
             e.stop();
-            //console.log('OMG CLICK', e);
 
             var actionType = e.target.dataset['actiontype'];
 
-            if(actionType == 'zoom_in') {
-                img.setStyles({
-                    width: img.getSize().x*2,
-                    height: img.getSize().y *2
-                });
-            }
-
-            if(actionType == 'zoom_out') {
-                img.setStyles({
-                    width: img.getSize().x/2,
-                    height: img.getSize().y/2
-                });
-            }
-
-            if(actionType == 'rotate_left' || actionType == 'rotate_right') {
-                var direction = (actionType == 'rotate_left' ? 'left' : 'right');
-
-                new Request({
-                    url: '/receipt_rotate/'+imgUid+'/' + direction,
-                    method: 'GET',
-                    onSuccess: function() {
-                        IndexController.loadImage(imgUid);
-                        _refreshThumbnail(imgUid);
-                    }
-                }).send();
-            }
+            actionHandlers[actionType]();
         });
     };
 
